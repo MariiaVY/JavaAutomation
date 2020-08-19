@@ -1,4 +1,4 @@
-package src.main.java.io.ctdev;
+package io.ctdev;
 
 public class App
 {

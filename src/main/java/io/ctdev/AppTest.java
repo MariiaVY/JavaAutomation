@@ -1,4 +1,4 @@
-package src.main.java.io.ctdev;
+package io.ctdev;
 
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
