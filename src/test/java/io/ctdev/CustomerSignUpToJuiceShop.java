@@ -1,3 +1,10 @@
+//Navigate to Juice Shop  http://18.217.145.6/.
+//Create a test for customer sign-up
+//Create tests for fields validation on the register page
+//Advanced:
+//Create test for login
+//Create at least 3 negative tests for login
+
 package io.ctdev;
 
 import io.ctdev.framework.webDriverSingleton;
