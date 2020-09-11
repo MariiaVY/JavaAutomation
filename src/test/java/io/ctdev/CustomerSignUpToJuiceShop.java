@@ -3,8 +3,10 @@
 //Create tests for fields validation on the register page
 
 package io.ctdev;
+
 import io.ctdev.framework.webDriverSingleton;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -79,11 +81,11 @@ public class CustomerSignUpToJuiceShop {
 
         String actualAnswerError = getDriver().findElement(By.xpath("//*[contains(text(),' Please provide an answer to your security question')]")).getAttribute("innerText").trim();
         Assert.assertEquals(actualAnswerError, answerErrorText, "Error text doesn't match");
-
     }
 
+
     @Test
-    public void userRegistration() {
+    public void userRegistration() throws InterruptedException {
 
         System.out.println("Registration");
         getDriver().findElement(By.id("emailControl")).clear();
@@ -93,11 +95,25 @@ public class CustomerSignUpToJuiceShop {
         getDriver().findElement(By.id("repeatPasswordControl")).clear();
         getDriver().findElement(By.id("repeatPasswordControl")).sendKeys(password);
         getDriver().findElement(By.id("securityAnswerControl")).sendKeys(petName);
+        Thread.sleep(3000);
         getDriver().findElement(By.id("registerButton")).click();
- }
+        Thread.sleep(3000);
+    }
+
+    public String id = "registration-form";
+
+    private boolean existsElement(String id) {
+        try {
+            getDriver().findElement(By.id(id));
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+        return true;
+    }
 
     @AfterClass
     public void AfterClass() {
+        existsElement(id);
         webDriverSingleton.closeDriver();
     }
 }
