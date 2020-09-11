@@ -83,10 +83,8 @@ public class CustomerSignUpToJuiceShop {
         Assert.assertEquals(actualAnswerError, answerErrorText, "Error text doesn't match");
     }
 
-
     @Test
     public void userRegistration() throws InterruptedException {
-
         System.out.println("Registration");
         getDriver().findElement(By.id("emailControl")).clear();
         getDriver().findElement(By.id("emailControl")).sendKeys(email);
@@ -109,9 +107,16 @@ public class CustomerSignUpToJuiceShop {
         return true;
     }
 
+    @Test
+    public void checkIfRegistrationFormPresent() {
+        Assert.assertTrue(existsElement(id), "registration form check");
+        System.out.println("The registration form isn't present");
+    }
+
+
+
     @AfterClass
     public void AfterClass() {
-        existsElement(id);
         webDriverSingleton.closeDriver();
     }
 }
