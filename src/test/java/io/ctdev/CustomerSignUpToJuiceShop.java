@@ -27,7 +27,7 @@ public class CustomerSignUpToJuiceShop {
     public String invalidPasswordRepeat = "322";
     public String invalidPasswordRepeatText = "Passwords do not match";
     public String answerErrorText = "Please provide an answer to your security question.";
-
+    public String id = "registration-form";
 
     @BeforeClass
     public void BeforeClass() {
@@ -99,8 +99,6 @@ public class CustomerSignUpToJuiceShop {
         getDriver().findElement(By.id("registerButton")).click();
         Thread.sleep(3000);
     }
-
-    public String id = "registration-form";
 
     private boolean existsElement(String id) {
         try {
