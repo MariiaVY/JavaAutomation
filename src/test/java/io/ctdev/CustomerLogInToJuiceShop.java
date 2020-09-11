@@ -1,3 +1,6 @@
+//Advanced:
+//Create test for login
+//Create at least 3 negative tests for login
 package io.ctdev;
 
 import io.ctdev.framework.webDriverSingleton;
@@ -25,7 +28,7 @@ public class CustomerLogInToJuiceShop {
         getDriver().findElement(By.xpath("//*[contains(text(),'Dismiss')]")).click();
     }
     @Test
-    public void NegativeCasesLogIn() throws InterruptedException {
+    public void negativeCaseLogIn1() throws InterruptedException {
         Thread.sleep(2000);
         System.out.println("Negative case for login section 1");
         getDriver().findElement(By.id("email")).sendKeys(invalidEmail);
@@ -35,31 +38,38 @@ public class CustomerLogInToJuiceShop {
 
         String actualLoginError = getDriver().findElement(By.xpath("//*[contains(text(),'Invalid email')]")).getAttribute("innerText").trim();
         Assert.assertEquals(actualLoginError, loginErrorText, "Error text doesn't match");
-
+    }
+    @Test
+    public void negativeCaseLogIn2() throws InterruptedException {
         System.out.println("Negative case for login section 2");
         getDriver().findElement(By.id("email")).clear();
         getDriver().findElement(By.id("email")).sendKeys(emptyString);
         getDriver().findElement(By.id("password")).clear();
         getDriver().findElement(By.id("password")).sendKeys(emptyString);
         getDriver().findElement(By.id("loginButton")).click();
-        Assert.assertEquals(actualLoginError, loginErrorText, "Error text doesn't match");
+        Thread.sleep(2000);
+        String actualError = getDriver().findElement(By.xpath("//*[contains(text(),'Invalid email')]")).getAttribute("innerText").trim();
+        Assert.assertEquals(actualError, loginErrorText, "Error text doesn't match");
+    }
 
+    @Test
+    public void negativeCaseLogIn3() throws InterruptedException {
         System.out.println("Negative case for login section 3");
         getDriver().findElement(By.id("email")).clear();
         getDriver().findElement(By.id("password")).clear();
         getDriver().findElement(By.id("loginButton")).click();
-        Assert.assertEquals(actualLoginError, loginErrorText, "Error text doesn't match");
-    }
+        Thread.sleep(2000);
+        String errorLogin = getDriver().findElement(By.xpath("//*[contains(text(),'Invalid email')]")).getAttribute("innerText").trim();
+        Assert.assertEquals(errorLogin, loginErrorText, "Error text doesn't match");    }
 
     @Test
-    public void UserIsAbleToLoginAfterRegistration() throws InterruptedException {
+    public void userIsAbleToLoginAfterRegistration() throws InterruptedException {
 
         System.out.println("Log in after registration");
         Thread.sleep(2000);
         getDriver().findElement(By.id("email")).sendKeys(validEmail);
         getDriver().findElement(By.id("password")).sendKeys(password);
         getDriver().findElement(By.id("loginButton")).click();
-
         System.out.println("Assert user Email");
         getDriver().findElement(By.id("navbarAccount")).click();
         Thread.sleep(3000);
