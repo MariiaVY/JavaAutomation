@@ -96,6 +96,8 @@ public class CustomerSignUpToJuiceShop {
         Thread.sleep(3000);
         getDriver().findElement(By.id("registerButton")).click();
         Thread.sleep(3000);
+        System.out.println("Check is the registration form isn't present");
+        Assert.assertTrue(existsElement(id), "registration form check");
     }
 
     private boolean existsElement(String id) {
@@ -106,14 +108,6 @@ public class CustomerSignUpToJuiceShop {
         }
         return true;
     }
-
-    @Test
-    public void checkIfRegistrationFormPresent() {
-        Assert.assertTrue(existsElement(id), "registration form check");
-        System.out.println("The registration form isn't present");
-    }
-
-
 
     @AfterClass
     public void AfterClass() {
