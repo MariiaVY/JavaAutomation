@@ -95,7 +95,7 @@ public class CustomerSignUpToJuiceShop {
         getDriver().findElement(By.id("securityAnswerControl")).sendKeys(petName);
         Thread.sleep(3000);
         getDriver().findElement(By.id("registerButton")).click();
-        Thread.sleep(3000);
+        Thread.sleep(5000);
         System.out.println("Check is the registration form isn't present");
         Assert.assertTrue(existsElement(id), "registration form check");
     }
@@ -106,7 +106,7 @@ public class CustomerSignUpToJuiceShop {
         } catch (NoSuchElementException e) {
             return false;
         }
-        return true;
+        return false;
     }
 
     @AfterClass
