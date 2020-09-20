@@ -8,6 +8,8 @@ import io.ctdev.framework.webDriverSingleton;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -28,9 +30,13 @@ public class CustomerSignUpToJuiceShop {
     public String invalidPasswordRepeatText = "Passwords do not match";
     public String answerErrorText = "Please provide an answer to your security question.";
     public String id = "registration-form";
+    WebDriverWait wait;
+
 
     @BeforeClass
     public void BeforeClass() {
+        wait = new WebDriverWait(getDriver(), 7);
+
         getDriver().get("http://18.217.145.6/");
         getDriver().findElement(By.cssSelector("[class*='close-dialog']")).click();
         WebElement element = getDriver().findElement(By.id("navbarAccount"));
@@ -40,11 +46,13 @@ public class CustomerSignUpToJuiceShop {
     }
 
     @Test
-    public void negativeCasesForRegistrationEmailField() throws InterruptedException {
+    public void negativeCasesForRegistrationEmailField() {
         System.out.println("Negative case for Email field");
         getDriver().findElement(By.id("emailControl")).sendKeys(invalidEmail);
         getDriver().findElement(By.id("registration-form")).click(); //clicking on any area to see an error
-        Thread.sleep(2000);
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Email address')]")));
+
         String actualInvalidEmail = getDriver().findElement(By.xpath("//*[contains(text(),'Email address')]")).getAttribute("innerText").trim();
         Assert.assertEquals(actualInvalidEmail, invalidEmailText, "Email Error text doesn't match");
     }
@@ -59,11 +67,13 @@ public class CustomerSignUpToJuiceShop {
     }
 
     @Test
-    public void negativeCasesForRegistrationRepeatPasswordField() throws InterruptedException {
+    public void negativeCasesForRegistrationRepeatPasswordField() {
         System.out.println("Negative case for Repeat Password field");
         getDriver().findElement(By.id("repeatPasswordControl")).sendKeys(invalidPasswordRepeat);
         getDriver().findElement(By.id("registration-form")).click();
-        Thread.sleep(2000);
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Passwords do not match')]")));
+
         String actualInvalidPasswordRepeat = getDriver().findElement(By.xpath("//*[contains(text(),'Passwords do not match')]")).getAttribute("innerText").trim();
         Assert.assertEquals(actualInvalidPasswordRepeat, invalidPasswordRepeatText, "Password error text doesn't match");
     }
@@ -72,19 +82,25 @@ public class CustomerSignUpToJuiceShop {
     public void negativeCasesForRegistrationSecuritySection() throws InterruptedException {
         System.out.println("Negative case for Security section");
         getDriver().findElement(By.id("mat-select-1")).click();
-        Thread.sleep(3000);
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'favorite pet')]")));
+
         getDriver().findElement(By.xpath("//*[contains(text(),'favorite pet')]")).click();
-        getDriver().findElement(By.id("securityAnswerControl")).click();
+        Thread.sleep(10000); //only this works;((
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("securityAnswerControl"))).click();
+
         System.out.println("Attribute 'disabled':" + getDriver().findElement(By.id("registerButton")).getAttribute("disabled"));
         getDriver().findElement(By.xpath("//*[@id='mat-hint-3']")).click();
-        Thread.sleep(3000);
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),' Please provide an answer to your security question')]")));
 
         String actualAnswerError = getDriver().findElement(By.xpath("//*[contains(text(),' Please provide an answer to your security question')]")).getAttribute("innerText").trim();
         Assert.assertEquals(actualAnswerError, answerErrorText, "Error text doesn't match");
     }
 
     @Test
-    public void userRegistration() throws InterruptedException {
+    public void userRegistration() {
         System.out.println("Registration");
         getDriver().findElement(By.id("emailControl")).clear();
         getDriver().findElement(By.id("emailControl")).sendKeys(email);
@@ -93,9 +109,8 @@ public class CustomerSignUpToJuiceShop {
         getDriver().findElement(By.id("repeatPasswordControl")).clear();
         getDriver().findElement(By.id("repeatPasswordControl")).sendKeys(password);
         getDriver().findElement(By.id("securityAnswerControl")).sendKeys(petName);
-        Thread.sleep(3000);
         getDriver().findElement(By.id("registerButton")).click();
-        Thread.sleep(5000);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
         System.out.println("Check if the registration form isn't present");
         Assert.assertFalse(existsElement(id), "registration form check");
     }

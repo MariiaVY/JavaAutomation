@@ -17,7 +17,7 @@ public class webDriverSingleton {
     public static WebDriver getDriver() {
         if (driver == null) {
             switch (testConfig.cfg.browser()) {
-                case "safari": {
+                case "firefox": {
                     WebDriverManager.firefoxdriver().setup();
                     driver = new FirefoxDriver();
                     break;
