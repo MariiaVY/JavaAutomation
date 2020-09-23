@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -46,6 +47,9 @@ public class AddProductToBasket {
 
     @Test
     public void verifyInformationAboutProduct() {
+
+        System.out.println("Information about product");
+
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='table-container custom-slate']")));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@alt='Banana Juice (1000ml)']"))).click();
 
@@ -130,9 +134,14 @@ public class AddProductToBasket {
         return true;
     }
 
-//    @AfterClass
-//    public void AfterClass() {
-//        webDriverSingleton.closeDriver();
-//    }
+    @AfterMethod
+    public void afterMethod() {
+        getDriver().findElement(By.xpath("//*[@alt='OWASP Juice Shop']")).click();
+    }
+
+    @AfterClass
+    public void afterClass() {
+        webDriverSingleton.closeDriver();
+    }
 
 }
