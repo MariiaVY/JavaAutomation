@@ -5,10 +5,7 @@
 package io.ctdev;
 
 import io.ctdev.framework.webDriverSingleton;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -36,7 +33,7 @@ public class AddProductToBasket {
     public String soldOutProductPath = "//*[contains(text(),'Juice Shop Coaster')]";
 
     @BeforeClass
-    public void BeforeClass() {
+    public void beforeClass() {
         wait = new WebDriverWait(getDriver(), 20);
         getDriver().get("http://18.217.145.6/#/login");
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Dismiss')]")));
@@ -91,19 +88,22 @@ public class AddProductToBasket {
     }
 
     @Test
-    public void addingSoldOutProductToTheBasket() throws InterruptedException {
+    public void addingSoldOutProductToTheBasket() {
+        getDriver().manage().addCookie(new Cookie ("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6NDEsInVzZXJuYW1lIjoiIiwiZW1haWwiOiJ0ZXN0MTIzQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiODRhYTExM2NhOWQ1MjMzYWNmZjZhNjI3YjVmNmIwM2UiLCJyb2xlIjoiY3VzdG9tZXIiLCJkZWx1eGVUb2tlbiI6IiIsImxhc3RMb2dpbklwIjoiMC4wLjAuMCIsInByb2ZpbGVJbWFnZSI6Ii9hc3NldHMvcHVibGljL2ltYWdlcy91cGxvYWRzL2RlZmF1bHQuc3ZnIiwidG90cFNlY3JldCI6IiIsImlzQWN0aXZlIjp0cnVlLCJjcmVhdGVkQXQiOiIyMDIwLTA5LTA3IDE5OjUwOjUwLjA0NiArMDA6MDAiLCJ1cGRhdGVkQXQiOiIyMDIwLTA5LTA3IDE5OjUwOjUwLjA0NiArMDA6MDAiLCJkZWxldGVkQXQiOm51bGx9LCJpYXQiOjE2MDA4ODkzNzEsImV4cCI6MTYwMDkwNzM3MX0.dDTYXKnht5U2Vg_5ndee1Zmyji0p4yeZ3MxAXjiE_MjxacbYvtxKF2fGHhsplA4ZBiPPKnFzYH_3INmpWgmzEtvBSWuyXGLI1KHEUq4Imzp20C1dg4QfaQkcRZ628s9vCfJkt3dfeLAEhB57ONtzHaJ0ud0DBoFCqSKNeO8feRg"));
+        getDriver().manage().addCookie(new Cookie ("language", "en"));
+        getDriver().navigate().refresh();
         getDriver().findElement(By.xpath("//*[@alt='OWASP Juice Shop']")).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@aria-label='dismiss cookie message']"))).click();
+        wait.until(ExpectedConditions.invisibilityOf(getDriver().findElement(By.xpath("//*[@aria-label='dismiss cookie message']"))));
         JavascriptExecutor jsx = (JavascriptExecutor)getDriver();
-        jsx.executeScript("window.scrollBy(0,450)", "");
-        Thread.sleep(7000);
+        jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(By.cssSelector("[class*=mat-paginator-navigation-next]")));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-paginator-range-actions']//button [2]"))).click();
 
         WebElement soldOutElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='ribbon ribbon-top-left ribbon-sold ng-star-inserted']/span")));
         String actualSoldOutText = soldOutElement.getAttribute("innerText").trim();
         Assert.assertEquals(actualSoldOutText, soldOutTxt, "Text doesn't match");
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-grid-tile ng-star-inserted'][4]//button[@aria-label='Add to Basket']"))).click();
+       wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-grid-tile ng-star-inserted'][4]//button[@aria-label='Add to Basket']"))).click();
 
         System.out.println("Verifying error is shown");
         WebElement soldOutError = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-simple-snackbar ng-star-inserted']")));
@@ -130,9 +130,9 @@ public class AddProductToBasket {
         return true;
     }
 
-    @AfterClass
-    public void AfterClass() {
-        webDriverSingleton.closeDriver();
-    }
+//    @AfterClass
+//    public void AfterClass() {
+//        webDriverSingleton.closeDriver();
+//    }
 
 }
