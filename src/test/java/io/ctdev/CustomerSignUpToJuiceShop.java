@@ -4,10 +4,9 @@
 
 package io.ctdev;
 
-import io.ctdev.framework.webDriverSingleton;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import io.ctdev.framework.WebDriverSingleton;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -15,7 +14,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static io.ctdev.framework.webDriverSingleton.getDriver;
+import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
 public class CustomerSignUpToJuiceShop {
 
@@ -79,15 +78,18 @@ public class CustomerSignUpToJuiceShop {
     }
 
     @Test
-    public void negativeCasesForRegistrationSecuritySection() throws InterruptedException {
+    public void negativeCasesForRegistrationSecuritySection() {
         System.out.println("Negative case for Security section");
-        getDriver().findElement(By.id("mat-select-1")).click();
-
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@aria-label='Selection list for the security question']"))).click();
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//mat-select[@aria-label = 'Selection list for the security question']"))).click().perform();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'favorite pet')]")));
 
+        JavascriptExecutor jsx = (JavascriptExecutor) getDriver();
+        jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(By.xpath("//*[contains(text(),'favorite pet')]")));
         getDriver().findElement(By.xpath("//*[contains(text(),'favorite pet')]")).click();
-        Thread.sleep(10000); //only this works;((
+        jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(By.id("securityAnswerControl")));
 
+        wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.id("securityAnswerControl"))));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("securityAnswerControl"))).click();
 
         System.out.println("Attribute 'disabled':" + getDriver().findElement(By.id("registerButton")).getAttribute("disabled"));
@@ -126,6 +128,6 @@ public class CustomerSignUpToJuiceShop {
 
     @AfterClass
     public void AfterClass() {
-        webDriverSingleton.closeDriver();
+        WebDriverSingleton.closeDriver();
     }
 }
