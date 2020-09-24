@@ -1,7 +1,7 @@
 //Open any desirable site and verify title
 package io.ctdev.HomeWork2;
 
-import io.ctdev.framework.webDriverSingleton;
+import io.ctdev.framework.WebDriverSingleton;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -9,7 +9,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static io.ctdev.framework.webDriverSingleton.getDriver;
+import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
 public class AssertTitle {
     WebDriver driver;
@@ -32,6 +32,6 @@ public class AssertTitle {
 
     @AfterClass
     public void afterClass() {
-       webDriverSingleton.closeDriver();
+       WebDriverSingleton.closeDriver();
     }
 }

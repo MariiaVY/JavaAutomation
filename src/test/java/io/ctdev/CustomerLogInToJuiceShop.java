@@ -3,7 +3,7 @@
 //Create at least 3 negative tests for login
 package io.ctdev;
 
-import io.ctdev.framework.webDriverSingleton;
+import io.ctdev.framework.WebDriverSingleton;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,7 +13,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static io.ctdev.framework.webDriverSingleton.getDriver;
+import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
 public class CustomerLogInToJuiceShop {
 
@@ -93,7 +93,7 @@ public class CustomerLogInToJuiceShop {
 
     @AfterClass
     public void AfterClass() {
-        webDriverSingleton.closeDriver();
+        WebDriverSingleton.closeDriver();
     }
 
 }

@@ -4,7 +4,7 @@
 
 package io.ctdev;
 
-import io.ctdev.framework.webDriverSingleton;
+import io.ctdev.framework.WebDriverSingleton;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import static io.ctdev.framework.webDriverSingleton.getDriver;
+import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
 public class AddProductToBasket {
     WebDriverWait wait;
@@ -32,6 +32,7 @@ public class AddProductToBasket {
     public String soldOutTxt = "Sold Out";
     public String soldOutErrorText = "We are out of stock! Sorry for the inconvenience." + "\n" + "X";
     public String soldOutProductPath = "//*[contains(text(),'Juice Shop Coaster')]";
+    public String totalPriceSoldOutProduct = "Total Price: 0¤";
 
     @BeforeClass
     public void beforeClass() {
@@ -118,9 +119,8 @@ public class AddProductToBasket {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='ng-star-inserted']//h1")));
 
         System.out.println("Verifying sold out product isn't present in the basket");
-        //String actualTotalPrice = getDriver().findElement(By.xpath("//*[@id='price']")).getAttribute("innerText").trim();
-        //Assert.assertEquals(actualTotalPrice, price, "Product total price doesn't match");
-
+        String actualTotalPrice = getDriver().findElement(By.xpath("//*[@id='price']")).getAttribute("innerText").trim();
+        Assert.assertEquals(actualTotalPrice, totalPriceSoldOutProduct, "Product total price doesn't match");
         Assert.assertFalse(existsElement(soldOutProductPath), "Sold out product is present");
 
     }
@@ -141,7 +141,7 @@ public class AddProductToBasket {
 
     @AfterClass
     public void afterClass() {
-        webDriverSingleton.closeDriver();
+        WebDriverSingleton.closeDriver();
     }
 
 }

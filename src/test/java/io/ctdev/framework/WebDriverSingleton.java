@@ -7,11 +7,11 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 
-public class webDriverSingleton {
+public class WebDriverSingleton {
 
     private static WebDriver driver;
 
-    private webDriverSingleton() {
+    private WebDriverSingleton() {
     }
 
     public static WebDriver getDriver() {
