@@ -75,18 +75,18 @@ public class CustomerSignUpToJuiceShop {
 
         String actualInvalidPasswordRepeat = getDriver().findElement(By.xpath("//*[contains(text(),'Passwords do not match')]")).getAttribute("innerText").trim();
         Assert.assertEquals(actualInvalidPasswordRepeat, invalidPasswordRepeatText, "Password error text doesn't match");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@aria-label='Selection list for the security question']")));
     }
 
     @Test
     public void negativeCasesForRegistrationSecuritySection() {
         System.out.println("Negative case for Security section");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@aria-label='Selection list for the security question']"))).click();
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//mat-select[@aria-label = 'Selection list for the security question']"))).click().perform();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'favorite pet')]")));
-
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'maiden name')]")));
         JavascriptExecutor jsx = (JavascriptExecutor) getDriver();
-        jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(By.xpath("//*[contains(text(),'favorite pet')]")));
-        getDriver().findElement(By.xpath("//*[contains(text(),'favorite pet')]")).click();
+        jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(By.xpath("//*[contains(text(),'maiden name')]")));
+        getDriver().findElement(By.xpath("//*[contains(text(),'maiden name')]")).click();
+
         jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(By.id("securityAnswerControl")));
 
         wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.id("securityAnswerControl"))));
@@ -111,7 +111,24 @@ public class CustomerSignUpToJuiceShop {
         getDriver().findElement(By.id("repeatPasswordControl")).clear();
         getDriver().findElement(By.id("repeatPasswordControl")).sendKeys(password);
         getDriver().findElement(By.id("securityAnswerControl")).sendKeys(petName);
-        getDriver().findElement(By.id("registerButton")).click();
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//mat-select[@aria-label = 'Selection list for the security question']"))).click().perform();
+
+        try {
+            getDriver().findElement(By.xpath("//*[contains(text(),'maiden name')]")).click();
+        } catch (Exception e) {
+            JavascriptExecutor executor = (JavascriptExecutor) getDriver();
+            executor.executeScript("arguments[0].click();", getDriver().findElement(By.xpath("//*[contains(text(),'maiden name')]")));
+        }
+
+        wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.cssSelector("[aria-label='Button to complete the registration'] span"))));
+
+        try {
+            getDriver().findElement(By.cssSelector("[aria-label='Button to complete the registration'] span")).click();
+        } catch (Exception e) {
+            JavascriptExecutor executor = (JavascriptExecutor) getDriver();
+            executor.executeScript("arguments[0].click();", getDriver().findElement(By.cssSelector("[aria-label='Button to complete the registration'] span")));
+        }
+
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
         System.out.println("Check if the registration form isn't present");
         Assert.assertFalse(existsElement(id), "registration form check");
@@ -128,6 +145,6 @@ public class CustomerSignUpToJuiceShop {
 
     @AfterClass
     public void AfterClass() {
-        WebDriverSingleton.closeDriver();
+       WebDriverSingleton.closeDriver();
     }
 }
