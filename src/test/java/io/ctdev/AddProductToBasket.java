@@ -5,6 +5,7 @@
 package io.ctdev;
 
 import io.ctdev.framework.WebDriverSingleton;
+import io.ctdev.framework.model.Customer;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -21,8 +22,6 @@ import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
 public class AddProductToBasket {
     WebDriverWait wait;
-    static String validEmail = "test123@gmail.com";
-    public String password = "123456789Test!";
     public String titleText = "Banana Juice (1000ml)";
     public String monkeysText = "Monkeys love it the most.";
     public String price = "1.99¤";
@@ -33,6 +32,7 @@ public class AddProductToBasket {
     public String soldOutErrorText = "We are out of stock! Sorry for the inconvenience." + "\n" + "X";
     public String soldOutProductPath = "//*[contains(text(),'Juice Shop Coaster')]";
     public String totalPriceSoldOutProduct = "Total Price: 0¤";
+    private Customer customer;
 
     @BeforeClass
     public void beforeClass() {
@@ -40,89 +40,159 @@ public class AddProductToBasket {
         getDriver().get("http://18.217.145.6/#/login");
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Dismiss')]")));
         getDriver().findElement(By.xpath("//*[contains(text(),'Dismiss')]")).click();
-        getDriver().findElement(By.id("email")).sendKeys(validEmail);
-        getDriver().findElement(By.id("password")).sendKeys(password);
-        getDriver().findElement(By.id("loginButton")).click();
-        getDriver().manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
-    }
-
-    @Test
-    public void verifyInformationAboutProduct() {
-
-        System.out.println("Information about product");
-
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='table-container custom-slate']")));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@alt='Banana Juice (1000ml)']"))).click();
-
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-dialog-content']")));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='cdk-overlay-pane']")));
-
-        WebElement titleElementText = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='container mat-typography']//h1")));
-        String actualTitleText = titleElementText.getAttribute("innerText").trim();
-        Assert.assertEquals(actualTitleText, titleText, "Title text doesn't match");
-
-        String actualMonkeysText = getDriver().findElement(By.xpath("//*[contains(text(),'Monkeys love it the most')]")).getAttribute("innerText").trim();
-        Assert.assertEquals(actualMonkeysText, monkeysText, "Monkeys text doesn't match");
-
-        String actualPrice = getDriver().findElement(By.xpath("//*[@class='container mat-typography']//*[@class='item-price']")).getAttribute("innerText").trim();
-        Assert.assertEquals(actualPrice, price, "Price doesn't match");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@aria-label='Close Dialog']"))).click();
+        logInWithUserCredentials();
     }
 
     @Test
     public void addingProductToTheBasket() {
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-grid-tile ng-star-inserted'][3]//button[@aria-label='Add to Basket']"))).click();
+        addProductToBasket();
 
-        WebElement addedProductElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Placed Banana Juice')]")));
-        String actualProductAddedText = addedProductElement.getAttribute("innerText").trim();
+        String actualProductAddedText = checkAddedProductTitle();
         Assert.assertEquals(actualProductAddedText, productAddedText, "The text doesn't match");
-
-        getDriver().findElement(By.xpath("//*[@aria-label='Show the shopping cart']")).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='ng-star-inserted']//h1")));
-
-        System.out.println("Verifying added product in the basket");
-        String actualBasketTitle = getDriver().findElement(By.xpath("//*[@class='mat-card mat-focus-indicator mat-elevation-z6']//h1")).getAttribute("innerText").trim();
-        Assert.assertEquals(actualBasketTitle, basketTitle, "Basket title doesn't match");
-
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@alt='Banana Juice (1000ml)']")));
-        String actualProductName = getDriver().findElement(By.xpath("//*[@class='mat-row cdk-row ng-star-inserted']//*[@role='gridcell'][2]")).getAttribute("innerText").trim();
+        navigateToBasket();
+        checkBasketTitle();
+        String actualProductName = verifyAddedProductName();
         Assert.assertEquals(actualProductName, productName, "Product Name doesn't match");
-
-        String actualProductPrice = getDriver().findElement(By.xpath("//*[@class='mat-cell cdk-cell cdk-column-price mat-column-price ng-star-inserted']")).getAttribute("innerText").trim();
+        String actualProductPrice = verifyAddedProductPrice();
         Assert.assertEquals(actualProductPrice, price, "Product price doesn't match");
     }
 
     @Test
     public void addingSoldOutProductToTheBasket() {
-        getDriver().manage().addCookie(new Cookie ("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6NDEsInVzZXJuYW1lIjoiIiwiZW1haWwiOiJ0ZXN0MTIzQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiODRhYTExM2NhOWQ1MjMzYWNmZjZhNjI3YjVmNmIwM2UiLCJyb2xlIjoiY3VzdG9tZXIiLCJkZWx1eGVUb2tlbiI6IiIsImxhc3RMb2dpbklwIjoiMC4wLjAuMCIsInByb2ZpbGVJbWFnZSI6Ii9hc3NldHMvcHVibGljL2ltYWdlcy91cGxvYWRzL2RlZmF1bHQuc3ZnIiwidG90cFNlY3JldCI6IiIsImlzQWN0aXZlIjp0cnVlLCJjcmVhdGVkQXQiOiIyMDIwLTA5LTA3IDE5OjUwOjUwLjA0NiArMDA6MDAiLCJ1cGRhdGVkQXQiOiIyMDIwLTA5LTA3IDE5OjUwOjUwLjA0NiArMDA6MDAiLCJkZWxldGVkQXQiOm51bGx9LCJpYXQiOjE2MDA4ODkzNzEsImV4cCI6MTYwMDkwNzM3MX0.dDTYXKnht5U2Vg_5ndee1Zmyji0p4yeZ3MxAXjiE_MjxacbYvtxKF2fGHhsplA4ZBiPPKnFzYH_3INmpWgmzEtvBSWuyXGLI1KHEUq4Imzp20C1dg4QfaQkcRZ628s9vCfJkt3dfeLAEhB57ONtzHaJ0ud0DBoFCqSKNeO8feRg"));
-        getDriver().manage().addCookie(new Cookie ("language", "en"));
-        getDriver().navigate().refresh();
-        getDriver().findElement(By.xpath("//*[@alt='OWASP Juice Shop']")).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@aria-label='dismiss cookie message']"))).click();
-        wait.until(ExpectedConditions.invisibilityOf(getDriver().findElement(By.xpath("//*[@aria-label='dismiss cookie message']"))));
-        JavascriptExecutor jsx = (JavascriptExecutor)getDriver();
-        jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(By.cssSelector("[class*=mat-paginator-navigation-next]")));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-paginator-range-actions']//button [2]"))).click();
+        navigateToHomePage();
+        dismissCookieMessage();
+        navigateToNextPage();
 
-        WebElement soldOutElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='ribbon ribbon-top-left ribbon-sold ng-star-inserted']/span")));
-        String actualSoldOutText = soldOutElement.getAttribute("innerText").trim();
+        String actualSoldOutText = findSoldOutProduct();
         Assert.assertEquals(actualSoldOutText, soldOutTxt, "Text doesn't match");
 
-       wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-grid-tile ng-star-inserted'][4]//button[@aria-label='Add to Basket']"))).click();
-
-        System.out.println("Verifying error is shown");
-        WebElement soldOutError = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-simple-snackbar ng-star-inserted']")));
-        String actualSoldOutError = soldOutError.getAttribute("innerText").trim();
+        addSoldOutProductToBasket();
+        String actualSoldOutError = verifySoldOutProductError();
         Assert.assertEquals(actualSoldOutError, soldOutErrorText, "Error text doesn't match");
 
+        navigateToBasket();
+        verifyBasketTotalPriceIsNull();
+        verifySoldOutProductIsNotInTheBasket();
+    }
+
+    @Test
+    public void verifyInformationAboutProduct() {
+
+        clickOnBananaJuiceProductIcon();
+        String actualTitleText = checkProductTitle();
+        Assert.assertEquals(actualTitleText, titleText, "Title text doesn't match");
+
+        String actualMonkeysText = checkProductInfo();
+        Assert.assertEquals(actualMonkeysText, monkeysText, "Monkeys text doesn't match");
+
+        String actualPrice = checkProductPrice();
+        Assert.assertEquals(actualPrice, price, "Price doesn't match");
+        closeTheDialog();
+    }
+
+    private void logInWithUserCredentials() {
+        customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").build();
+        getDriver().findElement(By.id("email")).sendKeys(customer.getEmail());
+        getDriver().findElement(By.id("password")).sendKeys(customer.getPassword());
+        getDriver().findElement(By.id("loginButton")).click();
+        getDriver().manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+    }
+
+    private void closeTheDialog() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@aria-label='Close Dialog']"))).click();
+    }
+
+    private String checkProductPrice() {
+        return getDriver().findElement(By.xpath("//*[@class='container mat-typography']//*[@class='item-price']")).getAttribute("innerText").trim();
+    }
+
+    private String checkProductInfo() {
+        return getDriver().findElement(By.xpath("//*[contains(text(),'Monkeys love it the most')]")).getAttribute("innerText").trim();
+    }
+
+    private String checkProductTitle() {
+        WebElement titleElementText = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='container mat-typography']//h1")));
+        return titleElementText.getAttribute("innerText").trim();
+    }
+
+    private void clickOnBananaJuiceProductIcon() {
+        System.out.println("Information about product");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='table-container custom-slate']")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@alt='Banana Juice (1000ml)']"))).click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-dialog-content']")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='cdk-overlay-pane']")));
+    }
+
+    private String verifyAddedProductPrice() {
+        return getDriver().findElement(By.xpath("//*[@class='mat-cell cdk-cell cdk-column-price mat-column-price ng-star-inserted']")).getAttribute("innerText").trim();
+    }
+
+    private String verifyAddedProductName() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@alt='Banana Juice (1000ml)']")));
+        return getDriver().findElement(By.xpath("//*[@class='mat-row cdk-row ng-star-inserted']//*[@role='gridcell'][2]")).getAttribute("innerText").trim();
+    }
+
+    private void checkBasketTitle() {
+        System.out.println("Verifying added product in the basket");
+        String actualBasketTitle = getDriver().findElement(By.xpath("//*[@class='mat-card mat-focus-indicator mat-elevation-z6']//h1")).getAttribute("innerText").trim();
+        Assert.assertEquals(actualBasketTitle, basketTitle, "Basket title doesn't match");
+    }
+
+    private void navigateToBasket() {
         getDriver().findElement(By.xpath("//*[@aria-label='Show the shopping cart']")).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='ng-star-inserted']//h1")));
+    }
 
+    private String checkAddedProductTitle() {
+        WebElement addedProductElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Placed Banana Juice')]")));
+        return addedProductElement.getAttribute("innerText").trim();
+    }
+
+    private void addProductToBasket() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-grid-tile ng-star-inserted'][3]//button[@aria-label='Add to Basket']"))).click();
+    }
+
+    private void verifySoldOutProductIsNotInTheBasket() {
         System.out.println("Verifying sold out product isn't present in the basket");
+        Assert.assertFalse(existsElement(soldOutProductPath), "Sold out product is present");
+    }
+
+    private void verifyBasketTotalPriceIsNull() {
         String actualTotalPrice = getDriver().findElement(By.xpath("//*[@id='price']")).getAttribute("innerText").trim();
         Assert.assertEquals(actualTotalPrice, totalPriceSoldOutProduct, "Product total price doesn't match");
-        Assert.assertFalse(existsElement(soldOutProductPath), "Sold out product is present");
+    }
 
+    private String verifySoldOutProductError() {
+        System.out.println("Verifying error is shown");
+        WebElement soldOutError = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-simple-snackbar ng-star-inserted']")));
+        return soldOutError.getAttribute("innerText").trim();
+    }
+
+    private void addSoldOutProductToBasket() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-grid-tile ng-star-inserted'][4]//button[@aria-label='Add to Basket']"))).click();
+    }
+
+    private String findSoldOutProduct() {
+        WebElement soldOutElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='ribbon ribbon-top-left ribbon-sold ng-star-inserted']/span")));
+        return soldOutElement.getAttribute("innerText").trim();
+    }
+
+    private void navigateToNextPage() {
+        JavascriptExecutor jsx = (JavascriptExecutor) getDriver();
+        jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(By.cssSelector("[class*=mat-paginator-navigation-next]")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='mat-paginator-range-actions']//button [2]"))).click();
+    }
+
+    private void dismissCookieMessage() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@aria-label='dismiss cookie message']"))).click();
+        wait.until(ExpectedConditions.invisibilityOf(getDriver().findElement(By.xpath("//*[@aria-label='dismiss cookie message']"))));
+    }
+
+    private void navigateToHomePage() {
+        getDriver().manage().addCookie(new Cookie("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6NDEsInVzZXJuYW1lIjoiIiwiZW1haWwiOiJ0ZXN0MTIzQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiODRhYTExM2NhOWQ1MjMzYWNmZjZhNjI3YjVmNmIwM2UiLCJyb2xlIjoiY3VzdG9tZXIiLCJkZWx1eGVUb2tlbiI6IiIsImxhc3RMb2dpbklwIjoiMC4wLjAuMCIsInByb2ZpbGVJbWFnZSI6Ii9hc3NldHMvcHVibGljL2ltYWdlcy91cGxvYWRzL2RlZmF1bHQuc3ZnIiwidG90cFNlY3JldCI6IiIsImlzQWN0aXZlIjp0cnVlLCJjcmVhdGVkQXQiOiIyMDIwLTA5LTA3IDE5OjUwOjUwLjA0NiArMDA6MDAiLCJ1cGRhdGVkQXQiOiIyMDIwLTA5LTA3IDE5OjUwOjUwLjA0NiArMDA6MDAiLCJkZWxldGVkQXQiOm51bGx9LCJpYXQiOjE2MDA4ODkzNzEsImV4cCI6MTYwMDkwNzM3MX0.dDTYXKnht5U2Vg_5ndee1Zmyji0p4yeZ3MxAXjiE_MjxacbYvtxKF2fGHhsplA4ZBiPPKnFzYH_3INmpWgmzEtvBSWuyXGLI1KHEUq4Imzp20C1dg4QfaQkcRZ628s9vCfJkt3dfeLAEhB57ONtzHaJ0ud0DBoFCqSKNeO8feRg"));
+        getDriver().manage().addCookie(new Cookie("language", "en"));
+        getDriver().navigate().refresh();
+        getDriver().findElement(By.xpath("//*[@alt='OWASP Juice Shop']")).click();
     }
 
     private boolean existsElement(String soldOutProductPath) {
