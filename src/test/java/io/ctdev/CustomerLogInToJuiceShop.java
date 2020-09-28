@@ -4,7 +4,6 @@
 package io.ctdev;
 
 import io.ctdev.framework.WebDriverSingleton;
-import io.ctdev.framework.config.testConfig;
 import io.ctdev.framework.model.Customer;
 import io.ctdev.framework.pages.login.LoginPage;
 import org.openqa.selenium.By;
