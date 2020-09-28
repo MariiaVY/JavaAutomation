@@ -4,6 +4,7 @@
 package io.ctdev;
 
 import io.ctdev.framework.WebDriverSingleton;
+import io.ctdev.framework.config.testConfig;
 import io.ctdev.framework.model.Customer;
 import io.ctdev.framework.pages.login.LoginPage;
 import org.openqa.selenium.By;
@@ -29,6 +30,7 @@ public class CustomerLogInToJuiceShop {
     public void BeforeClass() {
         wait = new WebDriverWait(getDriver(), 3);
         getDriver().get("http://18.217.145.6/#/login");
+        // getDriver().get(testConfig.cfg.baseUrl());
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Dismiss')]")));
         getDriver().findElement(By.xpath("//*[contains(text(),'Dismiss')]")).click();
         customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").withEmptyString("                 ").withInvalidEmail("test@test.com////").withInvalidPassword("aaaaa").build();

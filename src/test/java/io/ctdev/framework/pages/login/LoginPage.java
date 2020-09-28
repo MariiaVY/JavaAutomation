@@ -19,7 +19,7 @@ public class LoginPage extends AbstractPage {
     private By loginButtonElement = By.id("loginButton");
     private By errorElement = By.xpath("//*[contains(text(),'Invalid email')]");
     private By navBarAccountElement = By.id("navbarAccount");
-    private By GoToUserProfileElement = By.cssSelector("[aria-label='Go to user profile'] span");
+    private By goToUserProfileElement = By.cssSelector("[aria-label='Go to user profile'] span");
 
 
     public LoginPage(WebDriver driver) {
@@ -69,7 +69,7 @@ public class LoginPage extends AbstractPage {
 
     public String getCurrentUserName() {
         getDriver().findElement(navBarAccountElement).click();
-        WebElement userNameElement =  wait.until(ExpectedConditions.presenceOfElementLocated(GoToUserProfileElement));
+        WebElement userNameElement =  wait.until(ExpectedConditions.presenceOfElementLocated(goToUserProfileElement));
 
         return userNameElement.getAttribute("innerText").trim();
     }
