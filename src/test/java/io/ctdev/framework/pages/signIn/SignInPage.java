@@ -1,6 +1,6 @@
 package io.ctdev.framework.pages.signIn;
 
-import io.ctdev.framework.config.testConfig;
+import io.ctdev.framework.config.TestConfig;
 import io.ctdev.framework.pages.AbstractPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -30,8 +30,9 @@ public class SignInPage extends AbstractPage {
     private By selectSecurityListElement = By.xpath("//mat-select[@aria-label = 'Selection list for the security question']");
     private By maidenNameElement = By.xpath("//*[contains(text(),'maiden name')]");
     private By emailElement = By.id("email");
-
-
+    private String invalidPasswordRepeat = "aaaaka";
+    private String maidenName = "Test";
+    private String id = "registration-for";
 
     public SignInPage(WebDriver driver) {
         super(driver);
@@ -41,16 +42,16 @@ public class SignInPage extends AbstractPage {
 
     @Override
     public void openPage() {
-        driver.get(testConfig.cfg.baseUrl() + "#/login");
+        driver.get(TestConfig.cfg.baseUrl());
     }
 
     public String getEmailFieldError() {
         return getDriver().findElement(emailAddressElement).getAttribute("innerText").trim();
     }
 
-    public void enterInvalidEmail(String invalidEmail) {
+    public void enterInvalidEmail(String email) {
         System.out.println("Negative case for Email field");
-        getDriver().findElement(emailControlElement).sendKeys(invalidEmail);
+        getDriver().findElement(emailControlElement).sendKeys(email);
         getDriver().findElement(registrationFormElement).click();
 
         wait.until(ExpectedConditions.presenceOfElementLocated(emailAddressElement));
@@ -60,9 +61,9 @@ public class SignInPage extends AbstractPage {
         return getDriver().findElement(passwordFieldErrorElement).getAttribute("innerText").trim();
     }
 
-    public void enterInvalidPassword(String invalidPassword) {
+    public void enterInvalidPassword(String password) {
         System.out.println("Negative case for Password field");
-        getDriver().findElement(passwordControlElement).sendKeys(invalidPassword);
+        getDriver().findElement(passwordControlElement).sendKeys(password);
         getDriver().findElement(registrationFormElement).click();
     }
 
@@ -70,7 +71,7 @@ public class SignInPage extends AbstractPage {
         return getDriver().findElement(repeatPasswordErrorElement).getAttribute("innerText").trim();
     }
 
-    public void enterInvalidRepeatPassword(String invalidPasswordRepeat) {
+    public void enterInvalidRepeatPassword() {
         System.out.println("Negative case for Repeat Password field");
         getDriver().findElement(repeatPasswordControlElement).sendKeys(invalidPasswordRepeat);
         getDriver().findElement(registrationFormElement).click();
@@ -88,13 +89,14 @@ public class SignInPage extends AbstractPage {
         System.out.println("Attribute 'disabled':" + getDriver().findElement(registerButtonElement).getAttribute("disabled"));
     }
 
-    public void clickOnAnswerControlField(JavascriptExecutor jsx) {
+    public void clickOnAnswerControlField() {
+        JavascriptExecutor jsx = (JavascriptExecutor) getDriver();
         jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(securityAnswerControlElement));
         wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(securityAnswerControlElement)));
         wait.until(ExpectedConditions.presenceOfElementLocated(securityAnswerControlElement)).click();
     }
 
-    public JavascriptExecutor selectSecurityQuestion() {
+    public void selectSecurityQuestion() {
         getDriver().manage().addCookie(new Cookie("cookieconsent_status", "dismiss"));
         getDriver().manage().addCookie(new Cookie ("language", "en"));
         getDriver().navigate().refresh();
@@ -105,10 +107,9 @@ public class SignInPage extends AbstractPage {
         JavascriptExecutor jsx = (JavascriptExecutor) getDriver();
         jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(maidenNameElement));
         getDriver().findElement(maidenNameElement).click();
-        return jsx;
     }
 
-    public void checkIfRegistrationFormIsNotPresent(String id) {
+    public void checkIfRegistrationFormIsNotPresent() {
         wait.until(ExpectedConditions.presenceOfElementLocated(emailElement));
         System.out.println("Check if the registration form isn't present");
         Assert.assertFalse(existsElement(id), "registration form check");
@@ -124,7 +125,7 @@ public class SignInPage extends AbstractPage {
         getDriver().findElement(maidenNameElement).click();
     }
 
-    public void inputAnswerControlText(String maidenName) {
+    public void inputAnswerControlText() {
         getDriver().findElement(securityAnswerControlElement).sendKeys(maidenName);
     }
 

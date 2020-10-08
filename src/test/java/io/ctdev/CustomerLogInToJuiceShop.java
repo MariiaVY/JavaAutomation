@@ -22,35 +22,34 @@ public class CustomerLogInToJuiceShop {
     public String loginErrorText = "Invalid email or password.";
     WebDriverWait wait;
     private Customer customer;
+    private Customer customer1;
     private LoginPage loginPage;
     private WebDriver driver = getDriver();
 
     @BeforeClass
     public void BeforeClass() {
         wait = new WebDriverWait(getDriver(), 3);
-        getDriver().get("http://18.217.145.6/#/login");
-        // getDriver().get(testConfig.cfg.baseUrl());
+        loginPage = new LoginPage(driver);
+        loginPage.openPage();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Dismiss')]")));
         getDriver().findElement(By.xpath("//*[contains(text(),'Dismiss')]")).click();
-        customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").withEmptyString("                 ").withInvalidEmail("test@test.com////").withInvalidPassword("aaaaa").build();
-        loginPage = new LoginPage(driver);
     }
 
+
     @Test
-    public void negativeCaseLogIn1() {
-        loginPage.enterInvalidEmail(customer.getInvalidEmail());
-        loginPage.enterInvalidPassword(customer.getInvalidPassword());
+    public void verifyUserCanNotLogInWithInvalidCredentials() {
+        loginPage.clearEmailAndPasswordField();
+        customer1 = Customer.newBuilder().withName("test@test.com////").withPassword("aaaaa").build();
+        loginPage.logIn(customer1.getEmail(),customer1.getPassword());
         loginPage.clickOnLoginButton();
         String actualLoginError = loginPage.getInvalidEmailError();
         Assert.assertEquals(actualLoginError, loginErrorText, "Error text doesn't match");
     }
 
     @Test
-    public void negativeCaseLogIn2() {
-        loginPage.clearEmailField();
-        loginPage.enterEmptyEmailString(customer.getEmptyString());
-        loginPage.clearPasswordField();
-        loginPage.enterEmptyPasswordString(customer.getEmptyString());
+    public void verifyUserCanNotLogInWithFieldsFilledInSpaces() {
+        loginPage.clearEmailAndPasswordField();
+        loginPage.enterEmptyEmailAndPasswordString();
         loginPage.clickOnLoginButton();
 
         String actualError = loginPage.getInvalidEmailError();
@@ -58,26 +57,23 @@ public class CustomerLogInToJuiceShop {
     }
 
     @Test
-    public void negativeCaseLogIn3() {
-        loginPage.clearEmailField();
-        loginPage.clearPasswordField();
+    public void verifyUserCanNotLogInWithEmptyFields() {
+        loginPage.enterEmptyEmailAndPasswordString();
+        loginPage.clearEmailAndPasswordField();
         loginPage.clickOnLoginButton();
         String errorLogin = loginPage.getInvalidEmailError();
         Assert.assertEquals(errorLogin, loginErrorText, "Error text doesn't match");
     }
 
-    @Test
-    public void userIsAbleToLoginAfterRegistration() {
-
-        loginPage.enterUserEmail(customer.getEmail());
-        loginPage.enterUserPassword(customer.getPassword());
-        loginPage.clickOnLoginButton();
-        String actualUserName = loginPage.getCurrentUserName();
-        Assert.assertEquals(actualUserName, customer.getEmail(), "User name doesn't match");
-    }
-
     @AfterClass
     public void AfterClass() {
+        //public void userIsAbleToLoginAfterRegistration() { //moved this test here because it was run firstly and failed all tests!
+            loginPage.clearEmailAndPasswordField();
+            customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").build();
+            loginPage.logIn(customer.getEmail(),customer.getPassword());
+            String actualUserName = loginPage.getCurrentUserName();
+            Assert.assertEquals(actualUserName, customer.getEmail(), "User name doesn't match");
+       // }
         WebDriverSingleton.closeDriver();
     }
 

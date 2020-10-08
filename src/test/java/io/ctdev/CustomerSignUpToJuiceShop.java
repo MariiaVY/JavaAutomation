@@ -24,6 +24,7 @@ public class CustomerSignUpToJuiceShop {
     public String answerErrorText = "Please provide an answer to your security question.";
     WebDriverWait wait;
     private Customer customer;
+    private Customer customer1;
     private SignInPage signInPage;
     private WebDriver driver = getDriver();
 
@@ -31,41 +32,42 @@ public class CustomerSignUpToJuiceShop {
     @BeforeClass
     public void BeforeClass() {
         wait = new WebDriverWait(getDriver(), 7);
-        getDriver().get("http://18.217.145.6/");
+        signInPage = new SignInPage(driver);
+        signInPage.openPage();
         getDriver().findElement(By.cssSelector("[class*='close-dialog']")).click();
         WebElement element = getDriver().findElement(By.id("navbarAccount"));
         element.click();
         getDriver().findElement(By.id("navbarLoginButton")).click();
         getDriver().findElement(By.id("newCustomerLink")).click();
-        signInPage = new SignInPage(driver);
-        customer = Customer.newBuilder().withName("test" + System.currentTimeMillis() + "@gmail.com").withPassword("123456789Test!").withInvalidEmail("test@test.com////").withInvalidPassword("aaaaa").withInvalidPasswordRepeat("invalidPasswordRepeat").withMaidenName("Test").withId("registration-for").build();
+        customer = Customer.newBuilder().withName("test" + System.currentTimeMillis() + "@gmail.com").withPassword("123456789Test!").build();
+        customer1 = Customer.newBuilder().withName("test@test.com////").withPassword("aaaaa").build();
     }
 
     @Test
     public void negativeCasesForRegistrationEmailField() {
-        signInPage.enterInvalidEmail(customer.getInvalidEmail());
+        signInPage.enterInvalidEmail(customer1.getEmail());
         String actualInvalidEmail = signInPage.getEmailFieldError();
         Assert.assertEquals(actualInvalidEmail, invalidEmailText, "Email Error text doesn't match");
     }
 
     @Test
     public void negativeCasesForRegistrationPasswordField() {
-        signInPage.enterInvalidPassword(customer.getInvalidPassword());
+        signInPage.enterInvalidPassword(customer1.getPassword());
         String actualInvalidPassword = signInPage.getPasswordFieldError();
         Assert.assertEquals(actualInvalidPassword, invalidPasswordText, "Password error text doesn't match");
     }
 
     @Test
     public void negativeCasesForRegistrationRepeatPasswordField() {
-        signInPage.enterInvalidRepeatPassword(customer.getInvalidPasswordRepeat());
+        signInPage.enterInvalidRepeatPassword();
         String actualInvalidPasswordRepeat = signInPage.getRepeatPasswordFieldError();
         Assert.assertEquals(actualInvalidPasswordRepeat, invalidPasswordRepeatText, "Password error text doesn't match");
     }
 
     @Test
     public void negativeCasesForRegistrationSecuritySection() {
-        JavascriptExecutor jsx = signInPage.selectSecurityQuestion();
-        signInPage.clickOnAnswerControlField(jsx);
+        signInPage.selectSecurityQuestion();
+        signInPage.clickOnAnswerControlField();
         signInPage.checkThatRegisterButtonIsDisabled();
         String actualAnswerError = signInPage.getAnswerControlFieldError();
         Assert.assertEquals(actualAnswerError, answerErrorText, "Error text doesn't match");
@@ -77,9 +79,9 @@ public class CustomerSignUpToJuiceShop {
         signInPage.inputValidPassword(customer.getPassword());
         signInPage.repeatValidPasswordInput(customer.getPassword());
         signInPage.selectOptionFromList();
-        signInPage.inputAnswerControlText(customer.getMaidenName());
+        signInPage.inputAnswerControlText();
         signInPage.clickOnRegisterButton();
-        signInPage.checkIfRegistrationFormIsNotPresent(customer.getId());
+        signInPage.checkIfRegistrationFormIsNotPresent();
     }
 
     @AfterClass

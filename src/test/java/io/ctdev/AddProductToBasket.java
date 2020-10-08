@@ -6,6 +6,7 @@ package io.ctdev;
 
 import io.ctdev.framework.WebDriverSingleton;
 import io.ctdev.framework.model.Customer;
+import io.ctdev.framework.model.Product;
 import io.ctdev.framework.pages.addProductToBasket.BasketPage;
 import io.ctdev.framework.pages.login.LoginPage;
 import org.openqa.selenium.*;
@@ -31,21 +32,21 @@ public class AddProductToBasket {
     public String soldOutErrorText = "We are out of stock! Sorry for the inconvenience." + "\n" + "X";
     private Customer customer;
     private LoginPage loginPage;
+    private Product product;
     private BasketPage basketPage;
     private WebDriver driver = getDriver();
 
     @BeforeClass
     public void beforeClass() {
         wait = new WebDriverWait(getDriver(), 20);
-        getDriver().get("http://18.217.145.6/#/login");
+        basketPage = new BasketPage(driver);
+        basketPage.openPage();
+        loginPage = new LoginPage(driver);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Dismiss')]")));
         getDriver().findElement(By.xpath("//*[contains(text(),'Dismiss')]")).click();
-        loginPage = new LoginPage(driver);
-        basketPage = new BasketPage(driver);
-        customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").withBasketTitle("Your Basket").withSoldOutProductPath("//*[contains(text(),'Juice Shop Coaster')]").withTotalPriceSoldOutProduct("Total Price: 0¤").build();
-        loginPage.enterUserEmail(customer.getEmail());
-        loginPage.enterUserPassword(customer.getPassword());
-        loginPage.clickOnLoginButton();
+        customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").build();
+        loginPage.logIn(customer.getEmail(),customer.getPassword());
+        product = Product.newBuilder().withBasketTitle("Your Basket").withTotalPriceSoldOutProduct("Total Price: 0¤").build();
         getDriver().manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
     }
 
@@ -55,7 +56,7 @@ public class AddProductToBasket {
         String actualProductAddedText = basketPage.checkAddedProductTitle();
         Assert.assertEquals(actualProductAddedText, productAddedText, "The text doesn't match");
         basketPage.navigateToBasket();
-        basketPage.checkBasketTitle(customer.getBasketTitle());
+        basketPage.checkBasketTitle(product.getBasketTitle());
         String actualProductName = basketPage.verifyAddedProductName();
         Assert.assertEquals(actualProductName, productName, "Product Name doesn't match");
         String actualProductPrice = basketPage.verifyAddedProductPrice();
@@ -76,8 +77,8 @@ public class AddProductToBasket {
         Assert.assertEquals(actualSoldOutError, soldOutErrorText, "Error text doesn't match");
 
         basketPage.navigateToBasket();
-        basketPage.verifyBasketTotalPriceIsNull(customer.getTotalPriceSoldOutProduct());
-        basketPage.verifySoldOutProductIsNotInTheBasket(customer.getSoldOutProductPath());
+        basketPage.verifyBasketTotalPriceIsNull(product.getTotalPriceSoldOutProduct());
+        basketPage.verifySoldOutProductIsNotInTheBasket();
     }
 
     @Test

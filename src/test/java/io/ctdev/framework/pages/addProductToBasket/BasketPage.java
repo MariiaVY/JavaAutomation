@@ -1,14 +1,11 @@
 package io.ctdev.framework.pages.addProductToBasket;
 
-import io.ctdev.framework.config.testConfig;
-import io.ctdev.framework.model.Customer;
+import io.ctdev.framework.config.TestConfig;
 import io.ctdev.framework.pages.AbstractPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-
-import java.util.concurrent.TimeUnit;
 
 import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
@@ -39,6 +36,7 @@ public class BasketPage extends AbstractPage {
     private By nextPageElement = By.xpath("//*[@class='mat-paginator-range-actions']//button [2]");
     private By dismissCookieElement = By.xpath("//*[@aria-label='dismiss cookie message']");
     private By homePageElement = By.xpath("//*[@alt='OWASP Juice Shop']");
+    private String soldOutProductPath = "//*[contains(text(),'Juice Shop Coaster')]";
 
     public BasketPage(WebDriver driver) {
         super(driver);
@@ -48,7 +46,7 @@ public class BasketPage extends AbstractPage {
 
     @Override
     public void openPage() {
-        driver.get(testConfig.cfg.baseUrl() + "#/login");
+        driver.get(TestConfig.cfg.baseUrl() + "#/login");
     }
 
     public void closeTheDialog() {
@@ -105,7 +103,7 @@ public class BasketPage extends AbstractPage {
         wait.until(ExpectedConditions.presenceOfElementLocated(addProductToBasketElement)).click();
     }
 
-    public void verifySoldOutProductIsNotInTheBasket(String soldOutProductPath) {
+    public void verifySoldOutProductIsNotInTheBasket() {
         System.out.println("Verifying sold out product isn't present in the basket");
         Assert.assertFalse(existsElement(soldOutProductPath), "Sold out product is present");
     }
