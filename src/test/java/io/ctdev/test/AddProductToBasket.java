@@ -11,7 +11,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -41,8 +40,7 @@ public class AddProductToBasket extends BaseTest{
         basketPage = new BasketPage(driver);
         basketPage.openPage();
         loginPage = new LoginPage(driver);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Dismiss')]")));
-        getDriver().findElement(By.xpath("//*[contains(text(),'Dismiss')]")).click();
+        basketPage.clickOnDismiss();
         customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").build();
         loginPage.logIn(customer.getEmail(),customer.getPassword());
         product = Product.newBuilder().withBasketTitle("Your Basket").withTotalPriceSoldOutProduct("Total Price: 0¤").build();

@@ -55,6 +55,12 @@ public class BasketPage extends AbstractPage {
         wait.until(ExpectedConditions.presenceOfElementLocated(closeDialogElement)).click();
     }
 
+    @Step("Click on dismiss")
+    public void clickOnDismiss() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Dismiss')]")));
+        getDriver().findElement(By.xpath("//*[contains(text(),'Dismiss')]")).click();
+    }
+
     @Step("Check the product price")
     public String checkProductPrice() {
         return getDriver().findElement(itemPriceElement).getAttribute("innerText").trim();

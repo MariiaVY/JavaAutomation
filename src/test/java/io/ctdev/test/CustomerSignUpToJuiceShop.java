@@ -32,11 +32,9 @@ public class CustomerSignUpToJuiceShop extends BaseTest{
     public void BeforeClass() {
         signInPage = new SignInPage(driver);
         signInPage.openPage();
-        getDriver().findElement(By.cssSelector("[class*='close-dialog']")).click();
-        WebElement element = getDriver().findElement(By.id("navbarAccount"));
-        element.click();
-        getDriver().findElement(By.id("navbarLoginButton")).click();
-        getDriver().findElement(By.id("newCustomerLink")).click();
+        signInPage.closeDialog();
+        signInPage.clickOnNavbarAccount();
+        signInPage.clickOnNewCustomerLinkButton();
         customer = Customer.newBuilder().withName("test" + System.currentTimeMillis() + "@gmail.com").withPassword("123456789Test!").build();
         customer1 = Customer.newBuilder().withName("test@test.com////").withPassword("aaaaa").build();
     }

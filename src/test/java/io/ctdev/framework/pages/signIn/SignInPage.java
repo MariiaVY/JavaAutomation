@@ -51,6 +51,23 @@ public class SignInPage extends AbstractPage {
         return getDriver().findElement(emailAddressElement).getAttribute("innerText").trim();
     }
 
+    @Step("Close Dialog")
+    public void closeDialog() {
+        getDriver().findElement(By.cssSelector("[class*='close-dialog']")).click();
+    }
+
+    @Step("Click on navbar Account")
+    public void clickOnNavbarAccount() {
+        WebElement element = getDriver().findElement(By.id("navbarAccount"));
+        element.click();
+    }
+
+    @Step("Click on new customer link button")
+    public void clickOnNewCustomerLinkButton() {
+        getDriver().findElement(By.id("navbarLoginButton")).click();
+        getDriver().findElement(By.id("newCustomerLink")).click();
+    }
+
     @Step("Enter invalid email")
     public void enterInvalidEmail(String email) {
         System.out.println("Negative case for Email field");
