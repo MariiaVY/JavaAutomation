@@ -32,9 +32,9 @@
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
-                    <environmentVariables>
-                        <maven.project.basedir>${project.basedir}</maven.project.basedir>
-                    </environmentVariables>
+<!--                    <environmentVariables>-->
+<!--                        <maven.project.basedir>${project.basedir}</maven.project.basedir>-->
+<!--                    </environmentVariables>-->
                     <suiteXmlFiles>
                         <suiteXmlFile>${project.basedir}/src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
