@@ -1,4 +1,4 @@
-package io.ctdev;
+package io.ctdev.HomeWork2;
 
 import io.ctdev.framework.WebDriverSingleton;
 import org.openqa.selenium.WebDriver;

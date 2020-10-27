@@ -2,7 +2,7 @@
 //2. Add test that adds a product to basket and verifies that its added to the right place.
 //3. Add test, that clicks on 2nd page, finds a product that sold out, clicks on “Add to Basket” and verifies that error is present on the page.
 
-package io.ctdev;
+package io.ctdev.test;
 
 import io.ctdev.framework.WebDriverSingleton;
 import io.ctdev.framework.model.Customer;

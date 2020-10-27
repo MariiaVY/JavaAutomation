@@ -1,7 +1,6 @@
 // Open your own profile for editing
 // Create Java Class with String variables which will
 // contain css and xpath locators for each field, including  buttons.
-package io.ctdev;
 
 public class ProfilePage {
 

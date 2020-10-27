@@ -2,7 +2,7 @@
 //Create a test for customer sign-up
 //Create tests for fields validation on the register page
 
-package io.ctdev;
+package io.ctdev.test;
 
 import io.ctdev.framework.WebDriverSingleton;
 import io.ctdev.framework.model.Customer;

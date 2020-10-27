@@ -1,7 +1,7 @@
 //Advanced:
 //Create test for login
 //Create at least 3 negative tests for login
-package io.ctdev;
+package io.ctdev.test;
 import org.testng.annotations.Test;
 import io.ctdev.framework.WebDriverSingleton;
 import io.ctdev.framework.model.Customer;

@@ -6,7 +6,7 @@
 <!--    </listeners>-->
     <test verbose="2" name="Default test">
         <packages>
-            <package name="test.java.io.ctdev.*"/>
+            <package name="io.ctdev.test.*"/>
         </packages>
     </test>
 </suite>
