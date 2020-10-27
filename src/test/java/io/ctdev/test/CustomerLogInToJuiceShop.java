@@ -2,6 +2,9 @@
 //Create test for login
 //Create at least 3 negative tests for login
 package io.ctdev.test;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.testng.annotations.Test;
 import io.ctdev.framework.model.Customer;
 import io.ctdev.framework.pages.login.LoginPage;
@@ -13,6 +16,8 @@ import org.testng.annotations.BeforeClass;
 
 import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
+@Epic("Sign In/Sign Up")
+@Story("Login")
 public class CustomerLogInToJuiceShop extends BaseTest{
 
     public String loginErrorText = "Invalid email or password.";
@@ -30,6 +35,7 @@ public class CustomerLogInToJuiceShop extends BaseTest{
 
 
     @Test
+    @Description("Verify user can't logIn with invalid credentials")
     public void verifyUserCanNotLogInWithInvalidCredentials() {
         loginPage.clearEmailAndPasswordField();
         customer1 = Customer.newBuilder().withName("test@test.com////").withPassword("aaaaa").build();
@@ -40,6 +46,7 @@ public class CustomerLogInToJuiceShop extends BaseTest{
     }
 
     @Test
+    @Description("Verify user can't logIn with fields filled in spaces")
     public void verifyUserCanNotLogInWithFieldsFilledInSpaces() {
         loginPage.clearEmailAndPasswordField();
         loginPage.enterEmptyEmailAndPasswordString();
@@ -50,6 +57,7 @@ public class CustomerLogInToJuiceShop extends BaseTest{
     }
 
     @Test
+    @Description("Verify user can't logIn with empty fields")
     public void verifyUserCanNotLogInWithEmptyFields() {
         loginPage.enterEmptyEmailAndPasswordString();
         loginPage.clearEmailAndPasswordField();

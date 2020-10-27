@@ -5,6 +5,9 @@
 package io.ctdev.test;
 import io.ctdev.framework.model.Customer;
 import io.ctdev.framework.pages.signIn.SignInPage;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.openqa.selenium.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -12,6 +15,8 @@ import org.testng.annotations.Test;
 
 import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
+@Epic("Sign In")
+@Story("Registration")
 public class CustomerSignUpToJuiceShop extends BaseTest{
 
     public String invalidEmailText = "Email address is not valid.";
@@ -37,6 +42,7 @@ public class CustomerSignUpToJuiceShop extends BaseTest{
     }
 
     @Test
+    @Description("Verify user can't sign in with invalid email")
     public void negativeCasesForRegistrationEmailField() {
         signInPage.enterInvalidEmail(customer1.getEmail());
         String actualInvalidEmail = signInPage.getEmailFieldError();
@@ -44,6 +50,7 @@ public class CustomerSignUpToJuiceShop extends BaseTest{
     }
 
     @Test
+    @Description("Verify user can't sign in with invalid password")
     public void negativeCasesForRegistrationPasswordField() {
         signInPage.enterInvalidPassword(customer1.getPassword());
         String actualInvalidPassword = signInPage.getPasswordFieldError();
@@ -51,6 +58,7 @@ public class CustomerSignUpToJuiceShop extends BaseTest{
     }
 
     @Test
+    @Description("Verify user can't sign in with invalid repeat password")
     public void negativeCasesForRegistrationRepeatPasswordField() {
         signInPage.enterInvalidRepeatPassword();
         String actualInvalidPasswordRepeat = signInPage.getRepeatPasswordFieldError();
@@ -58,6 +66,7 @@ public class CustomerSignUpToJuiceShop extends BaseTest{
     }
 
     @Test
+    @Description("Verify user can't sign in with empty answer control field")
     public void negativeCasesForRegistrationSecuritySection() {
         signInPage.selectSecurityQuestion();
         signInPage.clickOnAnswerControlField();
@@ -67,6 +76,7 @@ public class CustomerSignUpToJuiceShop extends BaseTest{
     }
 
     @Test
+    @Description("Verify user can sign in with valid credentials")
     public void userRegistration() {
         signInPage.inputValidEmail(customer.getEmail());
         signInPage.inputValidPassword(customer.getPassword());
