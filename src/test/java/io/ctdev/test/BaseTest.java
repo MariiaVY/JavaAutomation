@@ -15,7 +15,7 @@ public abstract class BaseTest {
     @BeforeClass
     public void setupDriver() {
         driver = getDriver();
-        wait = new WebDriverWait(getDriver(), 7);
+        wait = new WebDriverWait(getDriver(), 20);
     }
 
     @AfterClass
