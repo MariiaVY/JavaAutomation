@@ -3,32 +3,25 @@
 //Create at least 3 negative tests for login
 package io.ctdev.test;
 import org.testng.annotations.Test;
-import io.ctdev.framework.WebDriverSingleton;
 import io.ctdev.framework.model.Customer;
 import io.ctdev.framework.pages.login.LoginPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
 import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
-public class CustomerLogInToJuiceShop {
+public class CustomerLogInToJuiceShop extends BaseTest{
 
     public String loginErrorText = "Invalid email or password.";
-    WebDriverWait wait;
     private Customer customer;
     private Customer customer1;
     private LoginPage loginPage;
-    private WebDriver driver = getDriver();
-
 
     @BeforeClass
     public void BeforeClass() {
-        wait = new WebDriverWait(getDriver(), 3);
         loginPage = new LoginPage(driver);
         loginPage.openPage();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Dismiss')]")));
@@ -74,7 +67,6 @@ public class CustomerLogInToJuiceShop {
         String actualUserName = loginPage.getCurrentUserName();
         Assert.assertEquals(actualUserName, customer.getEmail(), "User name doesn't match");
         // }
-        WebDriverSingleton.closeDriver();
     }
 
 }

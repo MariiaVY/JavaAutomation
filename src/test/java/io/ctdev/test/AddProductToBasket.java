@@ -3,15 +3,12 @@
 //3. Add test, that clicks on 2nd page, finds a product that sold out, clicks on “Add to Basket” and verifies that error is present on the page.
 
 package io.ctdev.test;
-
-import io.ctdev.framework.WebDriverSingleton;
 import io.ctdev.framework.model.Customer;
 import io.ctdev.framework.model.Product;
 import io.ctdev.framework.pages.addProductToBasket.BasketPage;
 import io.ctdev.framework.pages.login.LoginPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -20,9 +17,8 @@ import java.util.concurrent.TimeUnit;
 
 import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
-public class AddProductToBasket {
+public class AddProductToBasket extends BaseTest{
     private By juiceShopElement = By.xpath("//*[@alt='OWASP Juice Shop']");
-    WebDriverWait wait;
     public String titleText = "Banana Juice (1000ml)";
     public String monkeysText = "Monkeys love it the most.";
     public String price = "1.99¤";
@@ -34,11 +30,9 @@ public class AddProductToBasket {
     private LoginPage loginPage;
     private Product product;
     private BasketPage basketPage;
-    private WebDriver driver = getDriver();
 
     @BeforeClass
     public void beforeClass() {
-        wait = new WebDriverWait(getDriver(), 20);
         basketPage = new BasketPage(driver);
         basketPage.openPage();
         loginPage = new LoginPage(driver);
@@ -101,9 +95,5 @@ public class AddProductToBasket {
         getDriver().findElement(juiceShopElement).click();
     }
 
-    @AfterClass
-    public void afterClass() {
-        WebDriverSingleton.closeDriver();
-    }
 
 }

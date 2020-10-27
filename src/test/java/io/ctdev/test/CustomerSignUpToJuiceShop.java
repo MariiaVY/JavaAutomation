@@ -3,35 +3,28 @@
 //Create tests for fields validation on the register page
 
 package io.ctdev.test;
-
-import io.ctdev.framework.WebDriverSingleton;
 import io.ctdev.framework.model.Customer;
 import io.ctdev.framework.pages.signIn.SignInPage;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
-public class CustomerSignUpToJuiceShop {
+public class CustomerSignUpToJuiceShop extends BaseTest{
 
     public String invalidEmailText = "Email address is not valid.";
     public String invalidPasswordText = "Password must be 5-20 characters long.";
     public String invalidPasswordRepeatText = "Passwords do not match";
     public String answerErrorText = "Please provide an answer to your security question.";
-    WebDriverWait wait;
     private Customer customer;
     private Customer customer1;
     private SignInPage signInPage;
-    private WebDriver driver = getDriver();
 
 
     @BeforeClass
     public void BeforeClass() {
-        wait = new WebDriverWait(getDriver(), 7);
         signInPage = new SignInPage(driver);
         signInPage.openPage();
         getDriver().findElement(By.cssSelector("[class*='close-dialog']")).click();
@@ -82,10 +75,5 @@ public class CustomerSignUpToJuiceShop {
         signInPage.inputAnswerControlText();
         signInPage.clickOnRegisterButton();
         signInPage.checkIfRegistrationFormIsNotPresent();
-    }
-
-    @AfterClass
-    public void AfterClass() {
-       WebDriverSingleton.closeDriver();
     }
 }
