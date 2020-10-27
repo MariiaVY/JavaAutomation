@@ -2,7 +2,7 @@
 //Create test for login
 //Create at least 3 negative tests for login
 package io.ctdev;
-
+import org.testng.annotations.Test;
 import io.ctdev.framework.WebDriverSingleton;
 import io.ctdev.framework.model.Customer;
 import io.ctdev.framework.pages.login.LoginPage;
@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
 import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
@@ -25,6 +24,7 @@ public class CustomerLogInToJuiceShop {
     private Customer customer1;
     private LoginPage loginPage;
     private WebDriver driver = getDriver();
+
 
     @BeforeClass
     public void BeforeClass() {
@@ -40,7 +40,7 @@ public class CustomerLogInToJuiceShop {
     public void verifyUserCanNotLogInWithInvalidCredentials() {
         loginPage.clearEmailAndPasswordField();
         customer1 = Customer.newBuilder().withName("test@test.com////").withPassword("aaaaa").build();
-        loginPage.logIn(customer1.getEmail(),customer1.getPassword());
+        loginPage.logIn(customer1.getEmail(), customer1.getPassword());
         loginPage.clickOnLoginButton();
         String actualLoginError = loginPage.getInvalidEmailError();
         Assert.assertEquals(actualLoginError, loginErrorText, "Error text doesn't match");
@@ -68,12 +68,12 @@ public class CustomerLogInToJuiceShop {
     @AfterClass
     public void AfterClass() {
         //public void userIsAbleToLoginAfterRegistration() { //moved this test here because it was run firstly and failed all tests!
-            loginPage.clearEmailAndPasswordField();
-            customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").build();
-            loginPage.logIn(customer.getEmail(),customer.getPassword());
-            String actualUserName = loginPage.getCurrentUserName();
-            Assert.assertEquals(actualUserName, customer.getEmail(), "User name doesn't match");
-       // }
+        loginPage.clearEmailAndPasswordField();
+        customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").build();
+        loginPage.logIn(customer.getEmail(), customer.getPassword());
+        String actualUserName = loginPage.getCurrentUserName();
+        Assert.assertEquals(actualUserName, customer.getEmail(), "User name doesn't match");
+        // }
         WebDriverSingleton.closeDriver();
     }
 
