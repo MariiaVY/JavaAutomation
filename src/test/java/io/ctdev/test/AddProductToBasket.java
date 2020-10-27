@@ -7,6 +7,9 @@ import io.ctdev.framework.model.Customer;
 import io.ctdev.framework.model.Product;
 import io.ctdev.framework.pages.addProductToBasket.BasketPage;
 import io.ctdev.framework.pages.login.LoginPage;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
@@ -17,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
+@Epic("Sign In/Adding Product")
+@Story("Basket")
 public class AddProductToBasket extends BaseTest{
     private By juiceShopElement = By.xpath("//*[@alt='OWASP Juice Shop']");
     public String titleText = "Banana Juice (1000ml)";
@@ -45,6 +50,7 @@ public class AddProductToBasket extends BaseTest{
     }
 
     @Test
+    @Description("Verify user can add product to the basket")
     public void addingProductToTheBasket() {
         basketPage.addProductToBasket();
         String actualProductAddedText = basketPage.checkAddedProductTitle();
@@ -58,6 +64,7 @@ public class AddProductToBasket extends BaseTest{
     }
 
     @Test
+    @Description("Verify user can't add sold out product to the basket")
     public void addingSoldOutProductToTheBasket() {
         basketPage.navigateToHomePage();
         basketPage.dismissCookieMessage();
@@ -76,8 +83,8 @@ public class AddProductToBasket extends BaseTest{
     }
 
     @Test
+    @Description("Verify user can see information about product")
     public void verifyInformationAboutProduct() {
-
         basketPage.clickOnBananaJuiceProductIcon();
         String actualTitleText = basketPage.checkProductTitle();
         Assert.assertEquals(actualTitleText, titleText, "Title text doesn't match");

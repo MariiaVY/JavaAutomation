@@ -2,6 +2,7 @@ package io.ctdev.framework.pages.signIn;
 
 import io.ctdev.framework.config.TestConfig;
 import io.ctdev.framework.pages.AbstractPage;
+import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -45,10 +46,12 @@ public class SignInPage extends AbstractPage {
         driver.get(TestConfig.cfg.baseUrl());
     }
 
+    @Step("Get email field error")
     public String getEmailFieldError() {
         return getDriver().findElement(emailAddressElement).getAttribute("innerText").trim();
     }
 
+    @Step("Enter invalid email")
     public void enterInvalidEmail(String email) {
         System.out.println("Negative case for Email field");
         getDriver().findElement(emailControlElement).sendKeys(email);
@@ -57,20 +60,24 @@ public class SignInPage extends AbstractPage {
         wait.until(ExpectedConditions.presenceOfElementLocated(emailAddressElement));
     }
 
+    @Step("Get password field error")
     public String getPasswordFieldError() {
         return getDriver().findElement(passwordFieldErrorElement).getAttribute("innerText").trim();
     }
 
+    @Step("Enter invalid password")
     public void enterInvalidPassword(String password) {
         System.out.println("Negative case for Password field");
         getDriver().findElement(passwordControlElement).sendKeys(password);
         getDriver().findElement(registrationFormElement).click();
     }
 
+    @Step("Get repeat password field error")
     public String getRepeatPasswordFieldError() {
         return getDriver().findElement(repeatPasswordErrorElement).getAttribute("innerText").trim();
     }
 
+    @Step("Repeat invalid password")
     public void enterInvalidRepeatPassword() {
         System.out.println("Negative case for Repeat Password field");
         getDriver().findElement(repeatPasswordControlElement).sendKeys(invalidPasswordRepeat);
@@ -79,16 +86,19 @@ public class SignInPage extends AbstractPage {
         wait.until(ExpectedConditions.presenceOfElementLocated(repeatPasswordErrorElement));
     }
 
+    @Step("Get answer control field error")
     public String getAnswerControlFieldError() {
         getDriver().findElement(exclamationCircleElement).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(securityAnswerErrorElement));
         return getDriver().findElement(securityAnswerErrorElement).getAttribute("innerText").trim();
     }
 
+    @Step("Check that register button is disabled")
     public void checkThatRegisterButtonIsDisabled() {
         System.out.println("Attribute 'disabled':" + getDriver().findElement(registerButtonElement).getAttribute("disabled"));
     }
 
+    @Step("Click on answer control field")
     public void clickOnAnswerControlField() {
         JavascriptExecutor jsx = (JavascriptExecutor) getDriver();
         jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(securityAnswerControlElement));
@@ -96,6 +106,7 @@ public class SignInPage extends AbstractPage {
         wait.until(ExpectedConditions.presenceOfElementLocated(securityAnswerControlElement)).click();
     }
 
+    @Step("Select security question")
     public void selectSecurityQuestion() {
         getDriver().manage().addCookie(new Cookie("cookieconsent_status", "dismiss"));
         getDriver().manage().addCookie(new Cookie ("language", "en"));
@@ -109,36 +120,43 @@ public class SignInPage extends AbstractPage {
         getDriver().findElement(maidenNameElement).click();
     }
 
+    @Step("Check if registration form is not present")
     public void checkIfRegistrationFormIsNotPresent() {
         wait.until(ExpectedConditions.presenceOfElementLocated(emailElement));
         System.out.println("Check if the registration form isn't present");
         Assert.assertFalse(existsElement(id), "registration form check");
     }
 
+    @Step("Click on register button")
     public void clickOnRegisterButton() {
         wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(getRegisterButtonEnabledElement)));
         getDriver().findElement(getRegisterButtonEnabledElement).click();
     }
 
+    @Step("Select option from the list")
     public void selectOptionFromList() {
         new Actions(getDriver()).moveToElement(getDriver().findElement(selectSecurityListElement)).click().perform();
         getDriver().findElement(maidenNameElement).click();
     }
 
+    @Step("Enter control answer")
     public void inputAnswerControlText() {
         getDriver().findElement(securityAnswerControlElement).sendKeys(maidenName);
     }
 
+    @Step("Repeat valid password")
     public void repeatValidPasswordInput(String password) {
         getDriver().findElement(repeatPasswordControlElement).clear();
         getDriver().findElement(repeatPasswordControlElement).sendKeys(password);
     }
 
+    @Step("Enter valid password")
     public void inputValidPassword(String password) {
         getDriver().findElement(passwordControlElement).clear();
         getDriver().findElement(passwordControlElement).sendKeys(password);
     }
 
+    @Step("Enter valid email")
     public void inputValidEmail(String email) {
         System.out.println("Registration");
         getDriver().manage().addCookie(new Cookie("cookieconsent_status", "dismiss"));

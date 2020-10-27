@@ -2,6 +2,7 @@ package io.ctdev.framework.pages.login;
 
 import io.ctdev.framework.config.TestConfig;
 import io.ctdev.framework.pages.AbstractPage;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -35,23 +36,27 @@ public class LoginPage extends AbstractPage {
         driver.get(TestConfig.cfg.baseUrl() + "#/login");
     }
 
+    @Step("Enter empty email and password string")
     public void enterEmptyEmailAndPasswordString() {
         wait.until(ExpectedConditions.presenceOfElementLocated(emailElement));
         getDriver().findElement(emailElement).sendKeys(emptyString);
         getDriver().findElement(passwordElement).sendKeys(emptyString);
     }
 
+    @Step("Get invalid email error")
     public String getInvalidEmailError() {
         wait.until(ExpectedConditions.presenceOfElementLocated(errorElement));
         return getDriver().findElement(errorElement).getAttribute("innerText").trim();
     }
 
+    @Step("Clear email and password fields")
     public void clearEmailAndPasswordField() {
         wait.until(ExpectedConditions.presenceOfElementLocated(emailElement));
         getDriver().findElement(emailElement).clear();
         getDriver().findElement(passwordElement).clear();
     }
 
+    @Step("Get current user name")
     public String getCurrentUserName() {
         wait.until(ExpectedConditions.presenceOfElementLocated(navBarAccountElement));
         getDriver().findElement(navBarAccountElement).click();
@@ -60,10 +65,12 @@ public class LoginPage extends AbstractPage {
         return userNameElement.getAttribute("innerText").trim();
     }
 
+    @Step("Click on login button")
     public void clickOnLoginButton() {
         getDriver().findElement(loginButtonElement).click();
     }
 
+    @Step("Enter user email & password")
     public void logIn (String email, String password) {
         System.out.println("Log in after registration");
         wait.until(ExpectedConditions.presenceOfElementLocated(emailElement));
