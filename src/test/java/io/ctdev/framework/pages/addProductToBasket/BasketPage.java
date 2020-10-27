@@ -106,6 +106,9 @@ public class BasketPage extends AbstractPage {
 
     @Step("Navigate to basket")
     public void navigateToBasket() {
+        getDriver().manage().addCookie(new Cookie("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6NDEsInVzZXJuYW1lIjoiIiwiZW1haWwiOiJ0ZXN0MTIzQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiODRhYTExM2NhOWQ1MjMzYWNmZjZhNjI3YjVmNmIwM2UiLCJyb2xlIjoiY3VzdG9tZXIiLCJkZWx1eGVUb2tlbiI6IiIsImxhc3RMb2dpbklwIjoiMC4wLjAuMCIsInByb2ZpbGVJbWFnZSI6Ii9hc3NldHMvcHVibGljL2ltYWdlcy91cGxvYWRzL2RlZmF1bHQuc3ZnIiwidG90cFNlY3JldCI6IiIsImlzQWN0aXZlIjp0cnVlLCJjcmVhdGVkQXQiOiIyMDIwLTA5LTA3IDE5OjUwOjUwLjA0NiArMDA6MDAiLCJ1cGRhdGVkQXQiOiIyMDIwLTA5LTA3IDE5OjUwOjUwLjA0NiArMDA6MDAiLCJkZWxldGVkQXQiOm51bGx9LCJpYXQiOjE2MDA4ODkzNzEsImV4cCI6MTYwMDkwNzM3MX0.dDTYXKnht5U2Vg_5ndee1Zmyji0p4yeZ3MxAXjiE_MjxacbYvtxKF2fGHhsplA4ZBiPPKnFzYH_3INmpWgmzEtvBSWuyXGLI1KHEUq4Imzp20C1dg4QfaQkcRZ628s9vCfJkt3dfeLAEhB57ONtzHaJ0ud0DBoFCqSKNeO8feRg"));
+        getDriver().manage().addCookie(new Cookie("language", "en"));
+       //getDriver().navigate().refresh();
         getDriver().findElement(openBasketElement).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(basketInnerElement));
     }
