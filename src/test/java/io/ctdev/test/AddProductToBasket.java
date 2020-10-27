@@ -43,7 +43,7 @@ public class AddProductToBasket extends BaseTest{
         basketPage.clickOnDismiss();
         customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").build();
         loginPage.logIn(customer.getEmail(),customer.getPassword());
-        product = Product.newBuilder().withBasketTitle("Your Basket (test123@gmail.com)").withTotalPriceSoldOutProduct("Total Price: 0¤").build();
+        product = Product.newBuilder().withBasketTitle("Your Basket").withTotalPriceSoldOutProduct("Total Price: 0¤").build();
         getDriver().manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
     }
 
