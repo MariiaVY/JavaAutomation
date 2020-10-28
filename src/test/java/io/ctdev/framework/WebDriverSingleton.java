@@ -34,7 +34,7 @@ public class WebDriverSingleton {
                             System.out.println((TestConfig.cfg.remote()));
                             DesiredCapabilities capabilities = new DesiredCapabilities();
                             capabilities.setCapability("browserName", "chrome");
-                            capabilities.setCapability("browserVersion", "85.0");
+                            capabilities.setCapability("browserVersion", "86.0");
                             capabilities.setCapability("enableVnc", true);
                             driver.set(new RemoteWebDriver(new URL(TestConfig.cfg.remoteUrl()), DesiredCapabilities.chrome()));
                             WebDriverManager.chromedriver().driverVersion("86").setup();

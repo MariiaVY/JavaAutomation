@@ -67,7 +67,7 @@ public class CustomerLogInToJuiceShop extends BaseTest{
     }
 
     @AfterClass
-    public void AfterClass() {
+    public void afterClass() {
         //public void userIsAbleToLoginAfterRegistration() { //moved this test here because it was run firstly and failed all tests!
         loginPage.clearEmailAndPasswordField();
         customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").build();

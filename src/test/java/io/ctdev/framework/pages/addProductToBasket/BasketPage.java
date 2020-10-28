@@ -157,8 +157,7 @@ public class BasketPage extends AbstractPage {
     public void navigateToNextPage() {
         getDriver().manage().addCookie(new Cookie("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6NTAsInVzZXJuYW1lIjoiIiwiZW1haWwiOiJ0ZXN0MTIzQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiODRhYTExM2NhOWQ1MjMzYWNmZjZhNjI3YjVmNmIwM2UiLCJyb2xlIjoiY3VzdG9tZXIiLCJkZWx1eGVUb2tlbiI6IiIsImxhc3RMb2dpbklwIjoiMC4wLjAuMCIsInByb2ZpbGVJbWFnZSI6Ii9hc3NldHMvcHVibGljL2ltYWdlcy91cGxvYWRzL2RlZmF1bHQuc3ZnIiwidG90cFNlY3JldCI6IiIsImlzQWN0aXZlIjp0cnVlLCJjcmVhdGVkQXQiOiIyMDIwLTEwLTE3IDE2OjMxOjU4LjUzMCArMDA6MDAiLCJ1cGRhdGVkQXQiOiIyMDIwLTEwLTE3IDE2OjMxOjU4LjUzMCArMDA6MDAiLCJkZWxldGVkQXQiOm51bGx9LCJpYXQiOjE2MDM4ODA5NzYsImV4cCI6MTYwMzg5ODk3Nn0.d-Onhh63s31Sy9KqrK9RTZhdgrL-Z6Xoo8mbBLCAaM8DED6Bf6bHVBgdWDBZ_2EMRtj1qdasa42FcYICnfvneFfwRXzStGCEKpMfoMRfiHzs6T4hH20BcxKBpDJREWzUo39QG-KW8TegpMI3yD-PPOs5L7ShR1lakwtUoTHL-g4"));
         getDriver().manage().addCookie(new Cookie("language", "en"));
-        getDriver().manage().addCookie(new Cookie("cookieconsent_status", "dismiss"));
-        // getDriver().findElement(dismissCookie).click();
+       // getDriver().findElement(dismissCookie).click();
         JavascriptExecutor jsx = (JavascriptExecutor) getDriver();
         jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(paginatorElement));
         wait.until(ExpectedConditions.presenceOfElementLocated(nextPageElement));
