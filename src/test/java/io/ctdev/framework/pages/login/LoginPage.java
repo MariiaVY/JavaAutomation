@@ -82,8 +82,9 @@ public class LoginPage extends AbstractPage {
         getDriver().findElement(loginButtonElement).click();
     }
 
-    @Step("Enter can log out")
+    @Step("User can log out")
     public void logOut() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(logOutElement));
         getDriver().findElement(logOutElement).click();
     }
 }
