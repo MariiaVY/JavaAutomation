@@ -11,14 +11,13 @@ import io.ctdev.framework.pages.login.LoginPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
 import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
 @Epic("Sign In/Sign Up")
 @Story("Login")
-public class CustomerLogInToJuiceShop extends BaseTest{
+public class CustomerLogInToJuiceShop extends BaseTest {
 
     public String loginErrorText = "Invalid email or password.";
     private Customer customer;
@@ -37,6 +36,7 @@ public class CustomerLogInToJuiceShop extends BaseTest{
     @Test
     @Description("Verify user can't logIn with invalid credentials")
     public void verifyUserCanNotLogInWithInvalidCredentials() {
+        loginPage.openPage();
         loginPage.clearEmailAndPasswordField();
         customer1 = Customer.newBuilder().withName("test@test.com////").withPassword("aaaaa").build();
         loginPage.logIn(customer1.getEmail(), customer1.getPassword());
@@ -48,6 +48,7 @@ public class CustomerLogInToJuiceShop extends BaseTest{
     @Test
     @Description("Verify user can't logIn with fields filled in spaces")
     public void verifyUserCanNotLogInWithFieldsFilledInSpaces() {
+        loginPage.openPage();
         loginPage.clearEmailAndPasswordField();
         loginPage.enterEmptyEmailAndPasswordString();
         loginPage.clickOnLoginButton();
@@ -59,6 +60,7 @@ public class CustomerLogInToJuiceShop extends BaseTest{
     @Test
     @Description("Verify user can't logIn with empty fields")
     public void verifyUserCanNotLogInWithEmptyFields() {
+        loginPage.openPage();
         loginPage.enterEmptyEmailAndPasswordString();
         loginPage.clearEmailAndPasswordField();
         loginPage.clickOnLoginButton();
@@ -66,15 +68,14 @@ public class CustomerLogInToJuiceShop extends BaseTest{
         Assert.assertEquals(errorLogin, loginErrorText, "Error text doesn't match");
     }
 
-    @AfterClass
-    public void afterClass() {
-        //public void userIsAbleToLoginAfterRegistration() { //moved this test here because it was run firstly and failed all tests!
+    @Test
+    @Description("Verify user can logIn with valid credentials")
+    public void userIsAbleToLoginAfterRegistration() {
         loginPage.clearEmailAndPasswordField();
         customer = Customer.newBuilder().withName("test123@gmail.com").withPassword("123456789Test!").build();
         loginPage.logIn(customer.getEmail(), customer.getPassword());
         String actualUserName = loginPage.getCurrentUserName();
         Assert.assertEquals(actualUserName, customer.getEmail(), "User name doesn't match");
-        // }
+        loginPage.logOut();
     }
-
 }

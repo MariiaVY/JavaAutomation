@@ -4,6 +4,7 @@ import io.ctdev.framework.config.TestConfig;
 import io.ctdev.framework.pages.AbstractPage;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -22,6 +23,7 @@ public class LoginPage extends AbstractPage {
     private By navBarAccountElement = By.id("navbarAccount");
     private By goToUserProfileElement = By.cssSelector("[aria-label='Go to user profile'] span");
     private String emptyString = "          ";
+    private By logOutElement = By.xpath("//*[@id='navbarLogoutButton']//span");
 
 
 
@@ -51,6 +53,7 @@ public class LoginPage extends AbstractPage {
 
     @Step("Clear email and password fields")
     public void clearEmailAndPasswordField() {
+        getDriver().manage().addCookie(new Cookie("language", "en"));
         wait.until(ExpectedConditions.presenceOfElementLocated(emailElement));
         getDriver().findElement(emailElement).clear();
         getDriver().findElement(passwordElement).clear();
@@ -77,5 +80,10 @@ public class LoginPage extends AbstractPage {
         getDriver().findElement(emailElement).sendKeys(email);
         getDriver().findElement(passwordElement).sendKeys(password);
         getDriver().findElement(loginButtonElement).click();
+    }
+
+    @Step("Enter can log out")
+    public void logOut() {
+        getDriver().findElement(logOutElement).click();
     }
 }
