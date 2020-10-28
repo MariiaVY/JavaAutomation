@@ -17,6 +17,7 @@ public interface TestConfig extends Config {
     String env();
 
     boolean remote();
+
     String remoteUrl();
 }
 

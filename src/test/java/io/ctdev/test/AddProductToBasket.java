@@ -3,6 +3,7 @@
 //3. Add test, that clicks on 2nd page, finds a product that sold out, clicks on “Add to Basket” and verifies that error is present on the page.
 
 package io.ctdev.test;
+import io.ctdev.framework.listeners.TestListener;
 import io.ctdev.framework.model.Customer;
 import io.ctdev.framework.model.Product;
 import io.ctdev.framework.pages.addProductToBasket.BasketPage;
@@ -21,6 +22,7 @@ import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
 @Epic("Sign In/Adding Product")
 @Story("Basket")
+//@Listeners(TestListener.class)
 public class AddProductToBasket extends BaseTest{
     private By juiceShopElement = By.xpath("//*[@alt='OWASP Juice Shop']");
     public String titleText = "Banana Juice (1000ml)";
