@@ -161,7 +161,10 @@ public class BasketPage extends AbstractPage {
         JavascriptExecutor jsx = (JavascriptExecutor) getDriver();
         jsx.executeScript("arguments[0].scrollIntoView()", getDriver().findElement(paginatorElement));
         wait.until(ExpectedConditions.presenceOfElementLocated(nextPageElement));
-        getDriver().findElement(nextPageElement).click();
+        WebElement element = driver.findElement(nextPageElement);
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].click();", element);
+       // getDriver().findElement(nextPageElement).click();
     }
 
     @Step("Dismiss cookie message")

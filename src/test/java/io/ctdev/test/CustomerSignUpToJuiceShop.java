@@ -8,12 +8,9 @@ import io.ctdev.framework.pages.signIn.SignInPage;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
-import org.openqa.selenium.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import static io.ctdev.framework.WebDriverSingleton.getDriver;
 
 @Epic("Sign In")
 @Story("Registration")

@@ -3,10 +3,7 @@ package io.ctdev.framework.pages.login;
 import io.ctdev.framework.config.TestConfig;
 import io.ctdev.framework.pages.AbstractPage;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -71,7 +68,10 @@ public class LoginPage extends AbstractPage {
     @Step("Click on login button")
     public void clickOnLoginButton() {
         wait.until(ExpectedConditions.presenceOfElementLocated(loginButtonElement));
-        getDriver().findElement(loginButtonElement).click();
+        WebElement element = driver.findElement(loginButtonElement);
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].click();", element);
+       // getDriver().findElement(loginButtonElement).click();
     }
 
     @Step("Enter user email & password")
@@ -86,6 +86,9 @@ public class LoginPage extends AbstractPage {
     @Step("User can log out")
     public void logOut() {
         wait.until(ExpectedConditions.presenceOfElementLocated(logOutElement));
-        getDriver().findElement(logOutElement).click();
+        WebElement element = driver.findElement(logOutElement);
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].click();", element);
+        //getDriver().findElement(logOutElement).click();
     }
 }
