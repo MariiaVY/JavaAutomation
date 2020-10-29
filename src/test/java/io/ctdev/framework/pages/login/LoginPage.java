@@ -53,7 +53,7 @@ public class LoginPage extends AbstractPage {
 
     @Step("Clear email and password fields")
     public void clearEmailAndPasswordField() {
-        getDriver().manage().addCookie(new Cookie("language", "en"));
+        //getDriver().manage().addCookie(new Cookie("language", "en"));
         wait.until(ExpectedConditions.presenceOfElementLocated(emailElement));
         getDriver().findElement(emailElement).clear();
         getDriver().findElement(passwordElement).clear();
@@ -70,6 +70,7 @@ public class LoginPage extends AbstractPage {
 
     @Step("Click on login button")
     public void clickOnLoginButton() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(loginButtonElement));
         getDriver().findElement(loginButtonElement).click();
     }
 
