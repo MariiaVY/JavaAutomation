@@ -8,8 +8,8 @@ Feature: Customer Sign In
     And User clicks on Register button
     Then User is registered and can log in to application
     Examples:
-    |login                |password                  |
-    |test12341!!!467@gmail.com|123456789Test!        |
-    |test12**!55@gmail.com|123456789Test!           |
+    |login                    |password       |
+    |test12341!!!4a7@gmail.com|123456789Test! |
+    |test12**!5g@gmail.com    |123456789Test! |
 
 
