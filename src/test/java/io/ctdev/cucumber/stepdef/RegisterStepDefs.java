@@ -9,7 +9,6 @@ import static io.ctdev.framework.WebDriverSingleton.getDriver;
 public class RegisterStepDefs {
 
     private SignInPage signInPage = new SignInPage(getDriver());
-//test" + System.currentTimeMillis() + "@gmail.com
 
     @When("User opens registration page")
     public void userOpensRegistrationPage() {
