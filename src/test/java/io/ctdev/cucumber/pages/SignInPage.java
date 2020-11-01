@@ -161,7 +161,7 @@ public class SignInPage extends AbstractPage {
     }
 
     @Step("Enter control answer")
-    public void inputAnswerControlText() {
+    public void inputAnswerControlText(String answer) {
         getDriver().findElement(securityAnswerControlElement).sendKeys(maidenName);
     }
 

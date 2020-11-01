@@ -26,10 +26,10 @@ public class RegisterStepDefs {
         signInPage.repeatValidPasswordInput(password);
     }
 
-    @When("User select question and answers")
-    public void userSelectQuestionAndAnswer() {
+    @When("User select question and {string}")
+    public void userSelectQuestionAndAnswer(String answer) {
         signInPage.selectSecurityQuestion();
-        signInPage.inputAnswerControlText();
+        signInPage.inputAnswerControlText(answer);
     }
 
     @When("User clicks on Register button")
